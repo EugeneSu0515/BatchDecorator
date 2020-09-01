@@ -11,13 +11,13 @@ namespace BatchDecorator.API.Helpers
 {
     internal static class BatchDecoratorHelper
     {
-        public static BaseDecorator Decorate<T>(this IBatchProcess component, DecoratorType decorator) where T : BaseDecorator
+        public static BaseDecorator Decorate(this IBatchProcess component, DecoratorType decorator)
         {
             switch (decorator)
             {
                 case DecoratorType.FileDownload:
                     return ActivatorUtilities.CreateInstance(Startup.ServiceProvider
-                        , typeof(T), new object[]
+                        , typeof(FileDownloadDecorator), new object[]
                         {
                             component
                             , Startup.ServiceProvider.GetService<IOptions<FTPConfigModel>>()
@@ -25,14 +25,14 @@ namespace BatchDecorator.API.Helpers
                         }) as BaseDecorator;
                 case DecoratorType.ExecuteSP:
                     return ActivatorUtilities.CreateInstance(Startup.ServiceProvider
-                        , typeof(T), new object[]
+                        , typeof(ExecuteSPDecorator), new object[]
                         {
                             component
                             , Startup.ServiceProvider.GetService<IConfiguration>()
                         }) as BaseDecorator;
                 case DecoratorType.FileUpload:
                     return ActivatorUtilities.CreateInstance(Startup.ServiceProvider
-                        , typeof(T), new object[]
+                        , typeof(FileUploadDecorator), new object[]
                         {
                             component
                             , Startup.ServiceProvider.GetService<IOptions<FTPConfigModel>>()
@@ -41,7 +41,7 @@ namespace BatchDecorator.API.Helpers
                         }) as BaseDecorator;
                 default:
                     return ActivatorUtilities.CreateInstance(Startup.ServiceProvider
-                        , typeof(T), new object[]
+                        , typeof(FileDownloadDecorator), new object[]
                         {
                             component
                             , Startup.ServiceProvider.GetService<IOptions<FTPConfigModel>>()

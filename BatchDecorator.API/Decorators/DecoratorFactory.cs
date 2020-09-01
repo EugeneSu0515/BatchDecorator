@@ -30,18 +30,7 @@ namespace BatchDecorator.API.Decorators
                 foreach (var decorator in DecoratorsSequence)
                 {
                     _logger.Info($"[DecoratorFactory:GetBatchProcess] {JsonConvert.SerializeObject(decorator)}");
-                    switch (decorator)
-                    {
-                        case DecoratorType.FileDownload:
-                            result = result.Decorate<FileDownloadDecorator>(decorator);
-                            break;
-                        case DecoratorType.ExecuteSP:
-                            result = result.Decorate<ExecuteSPDecorator>(decorator);
-                            break;
-                        case DecoratorType.FileUpload:
-                            result = result.Decorate<FileUploadDecorator>(decorator);
-                            break;
-                    }
+                    result = result.Decorate(decorator);
                 }
             }
 
