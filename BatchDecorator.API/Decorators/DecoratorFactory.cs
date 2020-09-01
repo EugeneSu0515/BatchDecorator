@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using BatchDecorator.API.Enums;
-using BatchDecorator.API.Models;
+﻿using BatchDecorator.API.Enums;
+using BatchDecorator.API.Helpers;
 using BatchDecorator.API.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using NLog;
+using System.Collections.Generic;
 
 namespace BatchDecorator.API.Decorators
 {
@@ -54,47 +49,4 @@ namespace BatchDecorator.API.Decorators
         }
     }
 
-
-    internal static class FileDecoratorHelper
-    {
-        public static BaseDecorator Decorate<T>(this IBatchProcess component, DecoratorType decorator) where T : BaseDecorator
-        {
-            switch (decorator)
-            {
-                case DecoratorType.FileDownload:
-                    return ActivatorUtilities.CreateInstance(Startup.ServiceProvider
-                        , typeof(T), new object[]
-                        {
-                            component
-                            , Startup.ServiceProvider.GetService<IOptions<FTPConfigModel>>()
-                            , Startup.ServiceProvider.GetService<IHostEnvironment>()
-                        }) as BaseDecorator;
-                case DecoratorType.ExecuteSP:
-                    return ActivatorUtilities.CreateInstance(Startup.ServiceProvider
-                        , typeof(T), new object[]
-                        {
-                            component
-                            , Startup.ServiceProvider.GetService<IConfiguration>()
-                        }) as BaseDecorator;
-                case DecoratorType.FileUpload:
-                    return ActivatorUtilities.CreateInstance(Startup.ServiceProvider
-                        , typeof(T), new object[]
-                        {
-                            component
-                            , Startup.ServiceProvider.GetService<IOptions<FTPConfigModel>>()
-                            , Startup.ServiceProvider.GetService<IConfiguration>()
-                            , Startup.ServiceProvider.GetService<IHostEnvironment>()
-                        }) as BaseDecorator;
-                default:
-                    return ActivatorUtilities.CreateInstance(Startup.ServiceProvider
-                        , typeof(T), new object[]
-                        {
-                            component
-                            , Startup.ServiceProvider.GetService<IOptions<FTPConfigModel>>()
-                            , Startup.ServiceProvider.GetService<IHostEnvironment>()
-                        }) as BaseDecorator;
-            }
-            
-        }
-    }
 }
