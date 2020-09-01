@@ -21,7 +21,7 @@ namespace BatchDecorator.API.Decorators
         private readonly string _localPath;
         public FileDownloadDecorator(IBatchProcess batchProcess
         , IOptions<FTPConfigModel> options
-        , IHostEnvironment env) : base(batchProcess)
+        , IHostEnvironment env):base(batchProcess)
         {
             _ftpConfigModel = options.Value.Download;
             _fileName = $"download_{DateTime.Now:yyyyMMdd}.txt";
@@ -31,6 +31,7 @@ namespace BatchDecorator.API.Decorators
 
         public override void DoWork()
         {
+            _batchProcess.DoWork();
             _logger.Info($"[FileDownloadDecorator:FtpConfig] {JsonConvert.SerializeObject(_ftpConfigModel)}");
             _logger.Info($"FileDownloadDecorator:DoWork!");
             //FtpClient client = new FtpClient(_ftpConfigModel.Server);

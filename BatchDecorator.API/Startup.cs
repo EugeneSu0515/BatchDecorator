@@ -10,12 +10,14 @@ using BatchDecorator.API.Models;
 using BatchDecorator.API.Workers;
 using Hangfire;
 using Hangfire.MemoryStorage;
+using Microsoft.AspNetCore.Identity;
 
 namespace BatchDecorator.API
 {
     public class Startup
     {
         public static IServiceProvider ServiceProvider;
+        public delegate IBatchProcess BatchProcessResolver(string key);
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,9 +31,9 @@ namespace BatchDecorator.API
             services.AddControllers();
 
             services.AddTransient<IBatchProcess, BatchProcess>();
-            services.AddTransient<FileDownloadDecorator>();
-            services.AddTransient<ExecuteSPDecorator>();
-            services.AddTransient<FileUploadDecorator>();
+            services.Decorate<IBatchProcess, FileDownloadDecorator>();
+            services.Decorate<IBatchProcess, ExecuteSPDecorator>();
+            services.Decorate<IBatchProcess, FileUploadDecorator>();
 
             #region ---HangFire---
             services.AddHangfire(config => { config.UseMemoryStorage(); });

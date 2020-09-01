@@ -25,7 +25,7 @@ namespace BatchDecorator.API.Decorators
         public FileUploadDecorator(IBatchProcess batchProcess
             , IOptions<FTPConfigModel> options
             , IConfiguration config
-            , IHostEnvironment env) : base(batchProcess)
+            , IHostEnvironment env) :base(batchProcess)
         {
             _ftpConfigModel = options.Value.Download;
             _fileName = $"upload_{DateTime.Now:yyyyMMdd}.txt";
@@ -37,6 +37,7 @@ namespace BatchDecorator.API.Decorators
 
         public override void DoWork()
         {
+            _batchProcess.DoWork();
             _logger.Info($"[FileUploadDecorator:FtpConfig] {JsonConvert.SerializeObject(_ftpConfigModel)}");
             _logger.Info($"FileUploadDecorator:DoWork!");
             //using (var _conn = new SqlConnection(_connStr))
